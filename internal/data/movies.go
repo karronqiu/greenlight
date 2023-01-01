@@ -15,9 +15,6 @@ type MovieModel struct {
 	DB *sql.DB
 }
 
-type MockMovieModel struct {
-}
-
 func (m MovieModel) Insert(movie *Movie) error {
 	query := `
 		INSERT INTO movies (title, year, runtime, genres)
@@ -182,26 +179,6 @@ func (m MovieModel) GetAll(title string, genres []string, filters Filters) ([]*M
 	metadata := calculateMetadata(totalRecords, filters.Page, filters.PageSize)
 
 	return movies, metadata, nil
-}
-
-func (m MockMovieModel) Insert(movie *Movie) error {
-	return nil
-}
-
-func (m MockMovieModel) Get(id int64) (*Movie, error) {
-	return nil, nil
-}
-
-func (m MockMovieModel) Update(movie *Movie) error {
-	return nil
-}
-
-func (m MockMovieModel) Delete(id int64) error {
-	return nil
-}
-
-func (m MockMovieModel) GetAll(title string, genres []string, filters Filters) ([]*Movie, Metadata, error) {
-	return nil, Metadata{}, nil
 }
 
 type Movie struct {
