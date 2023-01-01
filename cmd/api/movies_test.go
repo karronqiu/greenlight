@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -31,11 +30,7 @@ func TestCreateMovieHandler(t *testing.T) {
 		Runtime: mocks.MockMovie.Runtime,
 	}
 
-	b, err := json.Marshal(input)
-	if err != nil {
-		t.Error(err)
-	}
-	s, header, body := ts.post(t, "/v1/movies/", string(b), h)
+	s, header, body := ts.post(t, "/v1/movies/", input, h)
 
 	assertEquals(t, http.StatusCreated, s, "status code: ")
 	assertEquals(t, fmt.Sprintf("/v1/movies/%d", mocks.MockMovie.ID), header.Get("Location"), "Location: ")

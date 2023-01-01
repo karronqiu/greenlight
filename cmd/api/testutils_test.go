@@ -2,11 +2,11 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"strings"
 	"testing"
 
 	"greenlight.karronqiu.github.com/internal/data/mocks"
@@ -61,9 +61,13 @@ func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, strin
 	return rs.StatusCode, rs.Header, string(body)
 }
 
-func (ts *testServer) post(t *testing.T, urlPath string, body string, headers map[string]string) (int, http.Header, string) {
+func (ts *testServer) post(t *testing.T, urlPath string, body any, headers map[string]string) (int, http.Header, string) {
+	b, err := json.Marshal(body)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	r, err := http.NewRequest(http.MethodPost, ts.URL+urlPath, strings.NewReader(body))
+	r, err := http.NewRequest(http.MethodPost, ts.URL+urlPath, bytes.NewReader(b))
 	if err != nil {
 		t.Fatal(err)
 	}
